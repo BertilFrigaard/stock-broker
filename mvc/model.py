@@ -9,9 +9,15 @@ class StockModel():
     def __init__(self):
         self.state = NOT_LOADED
     
-    def load_save(self, savefile):
+    def load_game(self, savefile):
         print("Loading save file: " + savefile)
-        print("NOT IMPLEMENTED")
+        raise NotImplementedError()
+
+    def save_game(self):
+        if self.state == NOT_LOADED:
+            raise NotImplementedError()
+        
+        print("Saving Game")
     
     def create_game(self, name, start_balance=DEFAULT_BALANCE):
         print("Creating game: " + name)
@@ -22,3 +28,12 @@ class StockModel():
         self.name = name
         self.balance = balance
         self.stocks = stocks
+
+    def get_balance(self):
+        return self.balance
+    
+    def get_stocks(self):
+        return self.stocks
+    
+    def get_name(self):
+        return self.name

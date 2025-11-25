@@ -19,6 +19,11 @@ class NavScreen(BaseScreen):
             self.nav_frame, text="Market", command=lambda: controller.navigate_to("market")
             )
         self.market_button.grid(row=0, column=1)
+
+        self.quit_button = ttk.Button(
+            self.nav_frame, text="Quit", command=lambda: controller.quit_program()
+            )
+        self.quit_button.grid(row=0, column=2)
         
         # Content Frame
         self.content_frame = ttk.Frame(self)
