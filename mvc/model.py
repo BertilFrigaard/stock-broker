@@ -1,3 +1,5 @@
+from data.service.alpaca_client import get_all_stocks
+
 # Defaults
 DEFAULT_BALANCE = 100_000
 
@@ -24,6 +26,12 @@ class StockModel():
         self.setup_game(name, start_balance)
     
     def setup_game(self, name, balance, stocks=[]):
+        print("Loading resources")
+        self.market_stocks = get_all_stocks()
+        for stock in self.market_stocks:
+            stock["_name_lc"] = stock["name"].lower()
+            stock["_symbol_lc"] = stock["symbol"].lower()
+
         print("Setting up game: " + name)
         self.name = name
         self.balance = balance
@@ -37,3 +45,13 @@ class StockModel():
     
     def get_name(self):
         return self.name
+    
+    def search_stocks(self, search, limit=20):
+        f_search = search.lower()
+        results = []
+        for stock in self.market_stocks:
+            if f_search in stock["_name_lc"] or f_search in stock["_symbol_lc"]:
+                    results.append(stock)
+                    if len(results) >= limit:
+                        break
+        return results

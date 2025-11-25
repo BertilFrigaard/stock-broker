@@ -1,7 +1,7 @@
 import sys
 from tkinter import Tk
 
-from errors.view_errors import ScreenNotFoundError
+from errors.view_errors import ScreenNotFoundError, ScreenMissingRequiredVariable
 
 from mvc.model import StockModel
 from mvc.view import StockView
@@ -26,17 +26,30 @@ class StockController():
         if not screen in self.view.screens:
             raise ScreenNotFoundError(screen)
         
-        screen = self.view.screens[screen]
+        screen_obj = self.view.screens[screen]
 
         if len(data_scope) == 0:
-            data_scope = screen.data_shape()
+            data_scope = screen_obj.data_shape()
 
-        screen.update(self.get_data(data_scope))
+        screen_obj.update(self.get_data(screen, data_scope))
 
-    def get_data(self, scope):
+    def get_data(self, screen, scope):
+        # At this point screen should ALWAYS be safe
+        screen_obj = self.view.screens[screen]
+
         data = {}
+
         if "balance" in scope:
             data["balance"] = self.model.get_balance()
+
+        if "stock-search-result" in scope:
+            try:
+                search_string = screen_obj.search_var.get()
+            except:
+                raise ScreenMissingRequiredVariable(screen, "search_var")
+            
+            data["stock-search-result"] = self.model.search_stocks(search_string)
+
         return data
 
 
@@ -44,4 +57,5 @@ class StockController():
     def quit_program(self):
         # TODO: Save Progress
         # self.model.save_game()
+        print("WARNING: Program save not implemented yet")
         sys.exit(0)

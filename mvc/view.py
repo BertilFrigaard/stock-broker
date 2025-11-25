@@ -18,10 +18,15 @@ class StockView():
             "load": LoadScreen(self.root),
         }
 
-        # Setup load screen
+        # Setup screens
         self.screens["load"].button1.configure(
             command=lambda: controller.action_create_game(self.screens["load"].name_entry.get())
         )
+
+        self.screens["market"].search_var.trace_add(["write", "unset"], 
+                                                    lambda *args: controller.update_screen("market", ["stock-search-result"])
+                                                    )
+
 
     def show_screen(self, screen):
         # Assumes controller validated
