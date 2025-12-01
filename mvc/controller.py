@@ -48,7 +48,7 @@ class StockController():
             except:
                 raise ScreenMissingRequiredVariable(screen, "search_var")
             
-            data["stock-search-result"] = self.model.search_stocks(search_string)
+            data["stock-search-result"] = self.model.search_stocks(search_string, limit=5)
 
         return data
 

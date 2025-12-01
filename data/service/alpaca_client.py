@@ -27,14 +27,14 @@ def get_historical_stock_price(symbol, start, end=None, timeframe=TimeFrame.Day)
 
     return [{"close": bar.close} for bar in bars[symbol]]
 
-def get_current_stock_price(symbol):    
+def get_current_stock_prices(symbols):    
     bar = stock_client.get_stock_latest_bar(
         StockLatestBarRequest(
-            symbol_or_symbols=[symbol]
+            symbol_or_symbols=symbols
         )
     )
 
-    return {"close": bar[symbol].close}
+    return bar
 
 trade_client = TradingClient(
     os.getenv("ALPACA_API_KEY"), 
@@ -42,4 +42,5 @@ trade_client = TradingClient(
 
 def get_all_stocks():
     assets = trade_client.get_all_assets(GetAssetsRequest(status="active", asset_class="us_equity"))
+    print(assets[0])
     return [{"id": asset.id, "name": asset.name, "symbol": asset.symbol, "tradable": asset.tradable, } for asset in assets if asset.name and asset.tradable]

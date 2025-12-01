@@ -1,4 +1,4 @@
-from data.service.alpaca_client import get_all_stocks
+from data.service.alpaca_client import get_all_stocks, get_current_stock_prices
 
 # Defaults
 DEFAULT_BALANCE = 100_000
@@ -54,4 +54,12 @@ class StockModel():
                     results.append(stock)
                     if len(results) >= limit:
                         break
+
+        prices = get_current_stock_prices([stock["symbol"] for stock in results])
+        for stock in results:
+            if stock["symbol"] in prices:
+                stock["price"] = prices[stock["symbol"]].close
+            else:
+                stock["price"] = None
+
         return results

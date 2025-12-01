@@ -1,6 +1,7 @@
 from tkinter import Tk, ttk, StringVar, Listbox
 
 from components.nav_screen import NavScreen
+from components.widgets.list_widget import List, ListStockElement
 
 class MarketScreen(NavScreen):
     def __init__(self, root: Tk, controller):
@@ -20,23 +21,26 @@ class MarketScreen(NavScreen):
         self.search_entry = ttk.Entry(self.explorer_frame, textvariable=self.search_var)
         self.search_entry.grid(row=0, column=0)
 
-        self.search_list = Listbox(self.explorer_frame,
+        self.search_list = List(self.explorer_frame)
+        self.search_list.grid(row=1, column=0)
+
+        """ self.search_list = Listbox(self.explorer_frame,
+                                   
                                    width=30,
                                    bg="grey",
                                    activestyle="dotbox",
                                    font="Helvetica",
                                    fg="yellow")
-        self.search_list.grid(row=1, column=0)
+        self.search_list.grid(row=1, column=0) """
 
     def data_shape(self):
         return ["stock-search-result"]
     
     def update(self, data):
         if "stock-search-result" in data:
-            for _ in range(self.search_list.size()):
-                self.search_list.delete(0)
+            self.search_list.clear_list()
 
-            for index, result in enumerate(data["stock-search-result"]):
-                self.search_list.insert(index, str(result["name"]))
-                if not result["name"]:
-                    print(result)
+            for result in data["stock-search-result"]:
+                print(result)
+                element = ListStockElement(self.search_list, result["name"], result["symbol"], result["price"])
+                self.search_list.add_to_list(element)
