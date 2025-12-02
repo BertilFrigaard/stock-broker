@@ -3,8 +3,8 @@ from tkinter import Tk, ttk, StringVar
 from components.base_screen import BaseScreen
 
 class LoadScreen(BaseScreen):
-    def __init__(self, root: Tk):
-        super().__init__(root)
+    def __init__(self, root: Tk, controller):
+        super().__init__(root, controller)
 
         self.title = ttk.Label(self, text="STOCK-BROKER", font=("Helvetica", 20, "bold"))
         self.title.grid(row=0, column=0)
@@ -19,7 +19,10 @@ class LoadScreen(BaseScreen):
         self.name_entry = ttk.Entry(self.new_game_frame)
         self.name_entry.grid(row=1, column=0)
         
-        self.button1 = ttk.Button(self.new_game_frame, text="Create Game")
+        self.button1 = ttk.Button(
+            self.new_game_frame, 
+            text="Create Game", 
+            command=lambda: self.controller.action_create_game(self.name_entry.get()))
         self.button1.grid(row=2, column=0)
         
         # Load Game Frame

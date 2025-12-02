@@ -4,7 +4,7 @@ from components.base_screen import BaseScreen
 
 class NavScreen(BaseScreen):
     def __init__(self, root: Tk, controller, title="Unknown Page", content_sticky="nsew"):
-        super().__init__(root)
+        super().__init__(root, controller)
     
         # Nav Frame
         self.nav_frame = ttk.Frame(self)

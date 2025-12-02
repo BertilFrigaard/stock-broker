@@ -8,13 +8,6 @@ class HomeScreen(NavScreen):
 
         self.balance = ttk.Label(self.content_frame, text="Balance: ", font=("Helvetica", 16))
         self.balance.grid(row=1, column=0, sticky="NW")
-        
-    def update_balance(self, balance):
-        self.balance.config(text=f"Balance: {balance}")
-
-    def data_shape(self):
-        return ["balance"]
     
-    def update(self, data):
-        if "balance" in data:
-            self.update_balance(data["balance"])
+    def show(self):
+        self.balance.config(text=f"Balance: {self.controller.get_balance()}")

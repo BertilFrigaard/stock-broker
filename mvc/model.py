@@ -31,11 +31,13 @@ class StockModel():
         for stock in self.market_stocks:
             stock["_name_lc"] = stock["name"].lower()
             stock["_symbol_lc"] = stock["symbol"].lower()
+        print("Done loading resources")
 
         print("Setting up game: " + name)
         self.name = name
         self.balance = balance
         self.stocks = stocks
+        print("Done setting up game")
 
     def get_balance(self):
         return self.balance

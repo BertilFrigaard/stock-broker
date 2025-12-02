@@ -1,13 +1,14 @@
 from tkinter import Frame, Tk
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from mvc.controller import StockController
 class BaseScreen(Frame):
-    def __init__(self, root: Tk, sticky="nsew"):
+    def __init__(self, root: Tk, controller: "StockController",  sticky="nsew"):
         super().__init__(root)
         self.grid(row=0, column=0, sticky=sticky)
+        self.controller = controller
 
-    def data_shape(self):
-        # Return what data this screen needs
-        return []
-    
-    def update(self, data):
-        # Update based on data param. data is shape as declared in data_shape
+    def show(self):
         pass

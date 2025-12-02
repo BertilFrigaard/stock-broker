@@ -42,5 +42,4 @@ trade_client = TradingClient(
 
 def get_all_stocks():
     assets = trade_client.get_all_assets(GetAssetsRequest(status="active", asset_class="us_equity"))
-    print(assets[0])
     return [{"id": asset.id, "name": asset.name, "symbol": asset.symbol, "tradable": asset.tradable, } for asset in assets if asset.name and asset.tradable]

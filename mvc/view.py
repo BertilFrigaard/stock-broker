@@ -15,19 +15,10 @@ class StockView():
         self.screens = {
             "home": HomeScreen(self.root, controller),
             "market": MarketScreen(self.root, controller),
-            "load": LoadScreen(self.root),
+            "load": LoadScreen(self.root, controller),
         }
-
-        # Setup screens
-        self.screens["load"].button1.configure(
-            command=lambda: controller.action_create_game(self.screens["load"].name_entry.get())
-        )
-
-        self.screens["market"].search_var.trace_add(["write", "unset"], 
-                                                    lambda *args: controller.update_screen("market", ["stock-search-result"])
-                                                    )
-
 
     def show_screen(self, screen):
         # Assumes controller validated
+        self.screens[screen].show()
         self.screens[screen].tkraise()
