@@ -57,8 +57,8 @@ class StockController():
                     self.model.add_stock(symbol)
 
     def sell_stock(self, symbol):
-        if symbol in self.model.get_stock_wallet():
-            if self.model.get_stock_wallet()[symbol] > 0:
+        if symbol in self.model.get_stocks():
+            if self.model.get_stocks()[symbol] > 0:
                 prices = self.model.get_stock_prices([symbol])
                 for price in prices:
                     if price["symbol"] == symbol:

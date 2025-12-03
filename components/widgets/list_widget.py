@@ -61,3 +61,15 @@ class ListStockElement(ListElementBase):
     
     def update_price(self, price):
         self.price_label.config(text = f"${price}")
+
+class ListOwnedStockElement(ListStockElement):
+    def __init__(self, root, name, symbol, amount, price=None):
+        super().__init__(root, name, symbol, price)
+
+        self.amount = amount
+
+        if price:
+            self.update_price(price)
+        
+    def update_price(self, price):
+        self.price_label.config(text = f"{self.amount}x | ${price}")

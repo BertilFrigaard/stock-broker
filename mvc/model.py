@@ -95,8 +95,10 @@ class StockModel():
         
         self.stocks[symbol] -= amount
 
-        if self.stocks[symbol] < 0:
+        if self.stocks[symbol] == 0:
+            del self.stocks[symbol]
+        elif self.stocks[symbol] < 0:
             print("WARNING: Removed more stock from stock wallet than available")
-            self.stocks[symbol]= 0
+            self.stocks[symbol] = 0
 
         
