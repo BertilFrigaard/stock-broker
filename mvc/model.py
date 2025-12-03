@@ -1,4 +1,4 @@
-from data.service.alpaca_client import get_all_stocks, get_current_stock_prices
+from data.service.alpaca_client import get_all_stocks, get_current_stock_prices, get_historical_stock_price
 
 # Defaults
 DEFAULT_BALANCE = 100_000
@@ -25,7 +25,7 @@ class StockModel():
         print("Creating game: " + name)
         self.setup_game(name, start_balance)
     
-    def setup_game(self, name, balance, stocks=[]):
+    def setup_game(self, name, balance, stocks={}):
         print("Loading resources")
         self.market_stocks = get_all_stocks()
         for stock in self.market_stocks:
@@ -56,12 +56,47 @@ class StockModel():
                     results.append(stock)
                     if len(results) >= limit:
                         break
-
-        prices = get_current_stock_prices([stock["symbol"] for stock in results])
-        for stock in results:
-            if stock["symbol"] in prices:
-                stock["price"] = prices[stock["symbol"]].close
-            else:
-                stock["price"] = None
-
         return results
+
+    def search_stock_symbol(self, symbol):
+        f_symbol = symbol.lower()
+        for stock in self.market_stocks:
+            if f_symbol == stock["_symbol_lc"]:
+                    return stock
+        return None
+    
+    def get_stock_prices(self, symbols):
+        prices = get_current_stock_prices(symbols)
+        return [{"symbol": symbol, "price": bar.close} for symbol, bar in prices.items()]
+    
+    def get_stock_price_history(self, symbol, start, end=None, timeframe=None):
+        if timeframe:
+            res = get_historical_stock_price(symbol, start, end, timeframe)
+        else:
+            res = get_historical_stock_price(symbol, start, end)
+
+        return res
+    
+    def withdraw(self, amount):
+        self.balance -= amount
+        
+    def deposit(self, amount):
+        self.balance += amount
+
+    def add_stock(self, symbol, amount = 1):
+        if not symbol in self.stocks:
+            self.stocks[symbol] = amount
+        else:
+            self.stocks[symbol] += amount
+    
+    def remove_stock(self, symbol, amount = 1):
+        if not symbol in self.stocks:
+            print("WARNING: Tried to remove stock not found in stock_wallet")
+        
+        self.stocks[symbol] -= amount
+
+        if self.stocks[symbol] < 0:
+            print("WARNING: Removed more stock from stock wallet than available")
+            self.stocks[symbol]= 0
+
+        

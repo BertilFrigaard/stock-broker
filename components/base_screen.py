@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 class BaseScreen(Frame):
     def __init__(self, root: Tk, controller: "StockController",  sticky="nsew"):
         super().__init__(root)
+        self.root = root
         self.grid(row=0, column=0, sticky=sticky)
         self.controller = controller
 

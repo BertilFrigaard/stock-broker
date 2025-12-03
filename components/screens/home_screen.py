@@ -11,3 +11,5 @@ class HomeScreen(NavScreen):
     
     def show(self):
         self.balance.config(text=f"Balance: {self.controller.get_balance()}")
+
+        print(self.controller.get_stock_wallet())
