@@ -1,24 +1,26 @@
+import json
+import os
 from data.service.alpaca_client import get_all_stocks, get_current_stock_prices, get_historical_stock_price
 
 # Defaults
 DEFAULT_BALANCE = 100_000
-
-# Enums
-NOT_LOADED = 0
-LOADED = 1
-
 class StockModel():
-    def __init__(self):
-        self.state = NOT_LOADED
-    
     def load_game(self, savefile):
         print("Loading save file: " + savefile)
-        raise NotImplementedError()
+        try:
+            with open("saves/" + savefile + ".json") as file:
+                save = json.load(file)
+                self.setup_game(savefile, save["balance"], save["stocks"])
+        except Exception as e:
+            print(e)
+            raise Exception("Invalid save file")
+    
+    def get_load_files(self):
+        return [f[:-5] for f in os.listdir("saves/") if f.endswith(".json")]
 
     def save_game(self):
-        if self.state == NOT_LOADED:
-            raise NotImplementedError()
-        
+        with open("saves/" + self.name + ".json", "w") as file:
+            json.dump({"balance": self.balance, "stocks": self.stocks}, file)
         print("Saving Game")
     
     def create_game(self, name, start_balance=DEFAULT_BALANCE):

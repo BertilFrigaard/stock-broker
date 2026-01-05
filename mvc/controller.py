@@ -18,6 +18,10 @@ class StockController():
         self.model.create_game(name)
         self.navigate_to("home")
 
+    def action_load_game(self, savefile):
+        self.model.load_game(savefile)
+        self.navigate_to("home")
+
     def navigate_to(self, screen):
         if not screen in self.view.screens:
             raise ScreenNotFoundError(screen)
@@ -81,10 +85,9 @@ class StockController():
                         out.append({"name": "Ukendt", "symbol": symbol, "price": price["price"], "amount": amount})
         return out        
             
-                
+    def get_load_files(self):
+        return self.model.get_load_files()
 
     def quit_program(self):
-        # TODO: Save Progress
-        # self.model.save_game()
-        print("WARNING: Program save not implemented yet")
+        self.model.save_game()
         sys.exit(0)

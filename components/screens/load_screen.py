@@ -33,10 +33,10 @@ class LoadScreen(BaseScreen):
         self.cta2.grid(row=0, column=0)
 
         self.game_var = StringVar()
-        self.game_option = ttk.OptionMenu(self.load_game_frame, self.game_var, "Choose Game")
+        self.game_option = ttk.OptionMenu(self.load_game_frame, self.game_var, "Choose Game", *controller.get_load_files())
         self.game_option.grid(row=1, column=0)
 
-        self.button2 = ttk.Button(self.load_game_frame, text="Load Game")
+        self.button2 = ttk.Button(self.load_game_frame, text="Load Game", command=lambda: self.controller.action_load_game(self.game_var.get()))
         self.button2.grid(row=2, column=0)
 
         self.rowconfigure((0, 1, 2), weight=1)
