@@ -1,4 +1,4 @@
-from tkinter import Tk, ttk, StringVar, Listbox
+from tkinter import Tk, ttk, StringVar, Listbox, TclError
 
 from components.nav_screen import NavScreen
 from components.widgets.list_widget import ClickableList, List, ListStockElement
@@ -44,11 +44,16 @@ class MarketScreen(NavScreen):
         label = ttk.Label(self.inspector_frame, text=stock["name"], font=("Helvetica", 16))
         label.grid(row=0, column=0)
 
-        fig = Figure(figsize=(10, 5), dpi=100)
-        plot = fig.add_subplot(111)
+        try:
+            self.fig.clear()
+        except AttributeError:
+            pass
+
+        self.fig = Figure(figsize=(10, 5), dpi=100)
+        plot = self.fig.add_subplot(111)
         plot.plot([s["close"] for s in stock["prices"]])
 
-        canvas = FigureCanvasTkAgg(fig, master=self.inspector_frame)
+        canvas = FigureCanvasTkAgg(self.fig, master=self.inspector_frame)
         canvas.get_tk_widget().grid(row=1, column=0)
 
         canvas.draw()
@@ -73,8 +78,11 @@ class MarketScreen(NavScreen):
                 if element.symbol == update["symbol"]:
                     try:
                         element.update_price(update["price"])
-                    except:
+                    except TclError:
+                        # Price callback may fire after list elements are destroyed
+                        # when user updates the search; safely ignore these stale updates
                         pass
+                        
 
     def show(self):
         self.search_entry.delete(0, "end")

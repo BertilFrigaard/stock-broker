@@ -27,7 +27,10 @@ class StockModel():
         print("Creating game: " + name)
         self.setup_game(name, start_balance)
     
-    def setup_game(self, name, balance, stocks={}):
+    def setup_game(self, name, balance, stocks=None):
+        if not stocks:
+            stocks = {}
+
         print("Loading resources")
         self.market_stocks = get_all_stocks()
         for stock in self.market_stocks:
@@ -85,6 +88,10 @@ class StockModel():
     def deposit(self, amount):
         self.balance += amount
 
+    def is_stock(self, symbol):
+        res = self.search_stock_symbol(symbol)
+        return True if res else False
+
     def add_stock(self, symbol, amount = 1):
         if not symbol in self.stocks:
             self.stocks[symbol] = amount
@@ -94,7 +101,8 @@ class StockModel():
     def remove_stock(self, symbol, amount = 1):
         if not symbol in self.stocks:
             print("WARNING: Tried to remove stock not found in stock_wallet")
-        
+            return
+
         self.stocks[symbol] -= amount
 
         if self.stocks[symbol] == 0:

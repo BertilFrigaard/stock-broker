@@ -51,6 +51,9 @@ class StockController():
         return stock
     
     def buy_stock(self, symbol):
+        if not self.model.is_stock(symbol):
+            print("WARNING: Triede to buy non existing stock")
+            return
         prices = self.model.get_stock_prices([symbol])
         for price in prices:
             if price["symbol"] == symbol:
@@ -71,7 +74,7 @@ class StockController():
         stocks = self.model.get_stocks()
         if stocks == {}:
             return []
-        prices = self.model.get_stock_prices([symbol for symbol, amount in stocks.items()])
+        prices = self.model.get_stock_prices([symbol for symbol, _ in stocks.items()])
         out = []
         for symbol, amount in stocks.items():
             for price in prices:
@@ -80,7 +83,7 @@ class StockController():
                     if lookup:
                         out.append({"name": lookup["name"], "symbol": symbol, "price": price["price"], "amount": amount})
                     else:
-                        out.append({"name": "Ukendt", "symbol": symbol, "price": price["price"], "amount": amount})
+                        out.append({"name": "Unknown", "symbol": symbol, "price": price["price"], "amount": amount})
         return out        
             
     def get_load_files(self):
