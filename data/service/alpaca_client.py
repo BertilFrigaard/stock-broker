@@ -1,4 +1,3 @@
-from errors.env_errors import EnvironmentVariableNotFound
 from alpaca.data import StockHistoricalDataClient, StockBarsRequest, StockLatestBarRequest, TimeFrame
 from alpaca.trading import TradingClient, GetAssetsRequest
 from dotenv import load_dotenv
@@ -8,7 +7,7 @@ load_dotenv()
 
 
 if not os.getenv("ALPACA_API_SECRET") or not os.getenv("ALPACA_API_KEY"):
-    raise EnvironmentVariableNotFound("ALPACA_API_SECRET or ALPACA_API_KEY")
+    raise Exception("Environment variable 'ALPACA_API_SECRET or ALPACA_API_KEY' was not found in loaded environment")
 
 stock_client = StockHistoricalDataClient(
     os.getenv("ALPACA_API_KEY"), 

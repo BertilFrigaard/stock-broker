@@ -3,8 +3,6 @@ from dateutil.relativedelta import relativedelta
 import sys
 from tkinter import Tk
 
-from errors.view_errors import ScreenNotFoundError, ScreenMissingRequiredVariable
-
 from mvc.model import StockModel
 from mvc.view import StockView
 
@@ -24,7 +22,7 @@ class StockController():
 
     def navigate_to(self, screen):
         if not screen in self.view.screens:
-            raise ScreenNotFoundError(screen)
+            raise Exception("Screen not found: " + screen)
         self.view.show_screen(screen)
 
     def get_balance(self):
